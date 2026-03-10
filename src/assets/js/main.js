@@ -698,7 +698,7 @@ document.addEventListener("htmx:afterSwap", () => {
 document.addEventListener("DOMContentLoaded", () => {
   document.querySelectorAll(".page-btn").forEach((btn) => {
     btn.addEventListener("click", () => {
-      const page = parseInt(btn.textContent.trim());
+      const page = parseInt(btn.dataset.page);
       if (!isNaN(page)) {
         currentPage = page;
         updateLeaderboardPagination();
