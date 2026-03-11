@@ -648,3 +648,79 @@ window.addEventListener('htmx:beforeRequest', (event) => {
         }
     }
 });
+
+const rowsPerPage = 5;
+let currentPage = 1;
+let totalResearchers = 3500;
+
+function updateLeaderboardPagination() {
+  const rows = document.querySelectorAll("#leaderboard-body .leaderboard-row");
+
+  const start = (currentPage - 1) * rowsPerPage;
+  const end = start + rowsPerPage;
+
+  rows.forEach((row, index) => {
+    if (index >= start && index < end) {
+      row.style.display = "";
+    } else {
+      row.style.display = "none";
+    }
+  });
+
+  const info = document.getElementById("pagination-info");
+
+  if (info) {
+    const displayStart = start + 1;
+    const displayEnd = Math.min(end, totalResearchers);
+    info.textContent = `Showing ${displayStart}-${displayEnd} of ${totalResearchers} researchers`;
+  }
+}
+
+function updateActiveButton() {
+  const buttons = document.querySelectorAll(".page-btn");
+
+  buttons.forEach((btn) => {
+    btn.classList.remove("bg-red-600", "text-white");
+
+    const page = parseInt(btn.textContent.trim());
+
+    if (page === currentPage) {
+      btn.classList.add("bg-red-600", "text-white");
+    }
+  });
+}
+
+document.addEventListener("htmx:afterSwap", () => {
+  updateLeaderboardPagination();
+  updateActiveButton();
+});
+
+document.addEventListener("DOMContentLoaded", () => {
+  document.querySelectorAll(".page-btn").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const page = parseInt(btn.dataset.page);
+      if (!isNaN(page)) {
+        currentPage = page;
+        updateLeaderboardPagination();
+        updateActiveButton();
+      }
+    });
+  });
+});
+
+document.getElementById("next-page")?.addEventListener("click", () => {
+  const maxPage = Math.ceil(totalResearchers / rowsPerPage);
+  if (currentPage < maxPage) {
+    currentPage++;
+    updateLeaderboardPagination();
+    updateActiveButton();
+  }
+});
+
+document.getElementById("prev-page")?.addEventListener("click", () => {
+  if (currentPage > 1) {
+    currentPage--;
+    updateLeaderboardPagination();
+    updateActiveButton();
+  }
+});
