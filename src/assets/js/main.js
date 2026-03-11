@@ -513,6 +513,7 @@ function updateUIForAuth() {
 // ===================================
 function updateFooterLastUpdated() {
     const el = document.getElementById('footer-last-updated');
+    //document.body.addEventListener("htmx:afterSwap", updateFooterLastUpdated);
     if (!el) return;
 
     const lastModified = new Date(document.lastModified);
@@ -543,6 +544,12 @@ function updateFooterLastUpdated() {
 
     el.textContent = `Last updated: ${dateStr} (${agoStr})`;
 }
+
+document.body.addEventListener("htmx:afterSwap", function (event) {
+    if (document.getElementById("footer-last-updated")) {
+        updateFooterLastUpdated();
+    }
+});
 
 // ===================================
 // Initialization
