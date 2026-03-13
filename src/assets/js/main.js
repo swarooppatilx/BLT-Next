@@ -16,23 +16,25 @@ const CONFIG = {
     ENABLE_ANALYTICS: true,
 };
 
+const TOKEN_KEY = 'authToken';
+
 function getAuthToken() {
-    return localStorage.getItem('authToken') || sessionStorage.getItem('authToken');
+    return localStorage.getItem(TOKEN_KEY) || sessionStorage.getItem(TOKEN_KEY);
 }
 
 function persistAuthToken(token, remember = true) {
     if (remember) {
-        localStorage.setItem('authToken', token);
-        sessionStorage.removeItem('authToken');
+        localStorage.setItem(TOKEN_KEY, token);
+        sessionStorage.removeItem(TOKEN_KEY);
     } else {
-        sessionStorage.setItem('authToken', token);
-        localStorage.removeItem('authToken');
+        sessionStorage.setItem(TOKEN_KEY, token);
+        localStorage.removeItem(TOKEN_KEY);
     }
 }
 
 function clearAuthToken() {
-    localStorage.removeItem('authToken');
-    sessionStorage.removeItem('authToken');
+    localStorage.removeItem(TOKEN_KEY);
+    sessionStorage.removeItem(TOKEN_KEY);
 }
 
 // ===================================
