@@ -50,7 +50,8 @@ coverage/
 tmp/
 temp/
 *.tmp
-nul 
+nul
+
 # Wrangler (Cloudflare Workers)
 .wrangler/
 wrangler.toml.bak
