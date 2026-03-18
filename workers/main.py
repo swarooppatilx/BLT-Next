@@ -1,4 +1,4 @@
-from js import Response, Headers, URL
+from js import Response, Headers, URL, Request
 import json
 import hashlib
 from datetime import datetime
@@ -446,7 +446,9 @@ async def route_request(request, env):
             if path == '/':
                 fetch_url = str(url).replace(path, '/index.html')
 
-            asset_response = await env.ASSETS.fetch(fetch_url)
+            # Use a Request object to preserve original method and headers
+            asset_request = Request.new(fetch_url, { 'method': request.method, 'headers': request.headers })
+            asset_response = await env.ASSETS.fetch(asset_request)
             return apply_frontend_security_headers(asset_response)
         except Exception as e:
             print(f"Assets Error: {e}")
